@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
+import ru.kata.spring.boot_security.demo.service.UserDetailsServiceImpl;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.security.Principal;
 import java.util.Set;
 
 @Controller
@@ -19,17 +21,20 @@ public class UserController {
 
     private final UserService userService;
     private final RoleService roleService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Autowired
-    public UserController(UserService userService, RoleService roleService) {
+    public UserController(UserService userService, UserDetailsServiceImpl userDetailService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
+        this.userDetailsService = userDetailService;
     }
 
     @GetMapping("/admin")
-    public String printUsers(Model model) {
+    public String printUsers(Principal principal, Model model) {
         model.addAttribute("users", userService.getAllUsers());
-        return "userslist";
+        model.addAttribute("user", userDetailsService.loadUserByUsername(principal.getName()));
+        return "adminPage";
     }
 
     @GetMapping("/admin/new")
@@ -71,12 +76,15 @@ public class UserController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/user")
+    @GetMapping("/userPage")
     public String pageUser(@AuthenticationPrincipal User user, ModelMap model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", user.getRoles());
-        return "user";
+        return "userPage";
     }
+
+
+
 }
 
 

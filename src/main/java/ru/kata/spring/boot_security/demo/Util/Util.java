@@ -43,9 +43,9 @@ public class Util implements CommandLineRunner {
         roleUserAdmin.add(role2);
 
 
-        User user1 = new User("admin", "administrator", "admin@mail.ru", "admin", roleAdmin);
-        User user2 = new User("user", "niceuser", "user@mail.ru", "user", roleUser);
-        User user3 = new User("Danny", "Hill", "dannyhill@mail.ru", "1234", roleUserAdmin);
+        User user1 = new User("admin", "administrator", 23, "admin@mail.ru", "admin", roleAdmin);
+        User user2 = new User("user", "niceuser", 27, "user@mail.ru", "user", roleUser);
+        User user3 = new User("Danny", "Hill", 24, "dannyhill@mail.ru", "1234", roleUserAdmin);
 
 
         userService.addUser(user1);
