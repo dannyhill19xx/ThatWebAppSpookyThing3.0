@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>user</title>
+</head>
+<body>
+<h1>User data</h1>
+<div>
+    <table>
+        <caption>
+            <h1>LIST</h1>
+        </caption>
+
+        <style>
+            table.iksweb th{text-decoration: none;border-collapse:collapse;width:auto;text-align:center;}
+            table.iksweb th{font-weight:normal;font-size:19px; color:#ffffff;background-color:#faa700;}
+            table.iksweb td{font-size:20px;color:#0f4369;}
+            table.iksweb td,table.iksweb th{white-space:pre-wrap;padding:5px 22px;line-height:20px;vertical-align: middle;border: 2px solid #000000;}
+            table.iksweb tr:hover{background-color:#fffb80}
+            table.iksweb tr:hover td{color:#060708;cursor:default;}
+        </style>
+
+        <table class="iksweb">
+            <tr><th> ID </th>
+                <th> Name </th>
+                <th> Lastname </th>
+                <th> email </th>
+                <th> Role </th>
+            </tr>
+            <tr>
+                <td th:text="${user.getId}"></td>
+                <td th:text="${user.getFirstName}"></td>
+                <td th:text="${user.getLastName}"></td>
+                <td th:text="${user.getEmail}"></td>
+                <td th:each="role:${roles}"><p th:text="${role.getName}"></p></td>
+            </tr>
+        </table>
+    </table>
+</div>
+<br/>
+<br/>
+
+        <button><a th:href="@{/logout}">Logout</a></button>
+
+</body>
+</html>

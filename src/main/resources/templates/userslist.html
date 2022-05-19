@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>All users</title>
+</head>
+<body>
+<h1></h1>
+<div>
+  <table>
+    <caption>
+      <h1>LIST</h1>
+    </caption>
+
+    <style>
+      table.iksweb th{text-decoration: none;border-collapse:collapse;width:auto;text-align:center;}
+      table.iksweb th{font-weight:normal;font-size:19px; color:#ffffff;background-color: #0032fa;}
+      table.iksweb td{font-size:20px;color:#0f4369;}
+      table.iksweb td,table.iksweb th{white-space:pre-wrap;padding:5px 22px;line-height:20px;vertical-align: middle;border: 2px solid rgba(0, 0, 0, 0.99);}
+      table.iksweb tr:hover{background-color:#fffb80}
+      table.iksweb tr:hover td{color:#060708;cursor:default;}
+    </style>
+
+    <table class="iksweb">
+      <tr><th> ID </th>
+        <th> Name </th>
+        <th> Lastname </th>
+        <th> E-mail </th>
+        <th> ROLE </th>
+        <th> Edit </th>
+        <th> Delete </th></tr>
+
+    <tr th:each  = "user : ${users}">
+      <td th:text = "${user.getId}">ID</td>
+      <td th:text = "${user.getFirstName}">Name</td>
+      <td th:text = "${user.getLastName}">Surname</td>
+      <td th:text = "${user.getEmail}">Email</td>
+      <td th:text = "${user.getRoles}">Role</td>
+      <td> <a th:href="@{/admin/{id}/edit(id=${user.getId})}">Edit</a></td>
+      <td> <form th:method="DELETE" th:action="@{admin/{id}(id=${user.getId})}">
+        <input type="submit" value="Delete"/>
+      </form></td>
+
+
+    </tr>
+    </table>
+
+<br/>
+<hr/>
+    <button><a href ="/admin/new"><H1 style="font-size: 120%; font-family: Verdana, Arial, Helvetica, sans-serif; color: #336">Create new user</H1></a></button>
+<button><a th:href="@{/logout}">Logout</a></button>
+  </table>
+</div>
+</body>
+</html>
