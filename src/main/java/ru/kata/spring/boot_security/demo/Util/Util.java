@@ -30,8 +30,8 @@ public class Util implements CommandLineRunner {
         Role role1 = new Role("ROLE_ADMIN");
         Role role2 = new Role("ROLE_USER");
 
-        roleService.save(role1);
-        roleService.save(role2);
+        roleService.saveRole(role1);
+        roleService.saveRole(role2);
 
         Set<Role> roleAdmin = new HashSet<>();
         Set<Role> roleUser = new HashSet<>();
@@ -48,9 +48,9 @@ public class Util implements CommandLineRunner {
         User user3 = new User("Danny", "Hill", 24, "dannyhill@mail.ru", "1234", roleUserAdmin);
 
 
-        userService.addUser(user1);
-        userService.addUser(user2);
-        userService.addUser(user3);
+        userService.saveUser(user1);
+        userService.saveUser(user2);
+        userService.saveUser(user3);
 
     }
 }

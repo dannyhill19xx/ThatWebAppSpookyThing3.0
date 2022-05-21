@@ -2,26 +2,27 @@ package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
 import ru.kata.spring.boot_security.demo.model.User;
-
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
+    private final RoleService roleService;
     private final ApplicationContext context;
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, ApplicationContext context, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserDao userDao, RoleService roleService, ApplicationContext context) {
         this.userDao = userDao;
+        this.roleService = roleService;
         this.context = context;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -29,35 +30,54 @@ public class UserServiceImpl implements UserService {
         return userDao.getAllUsers();
     }
 
-
     @Override
-    public User getUserById(long id) {
+    public User getUserById(int id) {
         return userDao.getUserById(id);
     }
 
-    @Transactional
     @Override
-    public void addUser(User user) {
+    @Transactional
+    public void saveUser(User user) {
         setEncryptedPassword(user);
-        userDao.addUser(user);
+        userDao.saveUser(user);
     }
 
     @Transactional
     @Override
-    public void removeUser(long id) {
-        userDao.removeUser(id);
+    public void updateUser(User updatedUser) {
+        if (!updatedUser.getPassword().equals(userDao.getUserById(updatedUser.getId()).getPassword())) {
+            setEncryptedPassword(updatedUser);
+        }
+        userDao.updateUser(updatedUser);
     }
 
-    @Transactional
+
     @Override
-    public void editUser(User user) {
-        setEncryptedPassword(user);
-        userDao.editUser(user);
+    @Transactional
+    public void deleteUser(int id) {
+        userDao.deleteUser(id);
+    }
+
+
+    @Override
+    public User findUserByUsername(String username) {
+
+        return userDao.findUserByUsername(username);
     }
 
     @Override
     public void setEncryptedPassword(User user) {
         PasswordEncoder passwordEncoder = context.getBean(PasswordEncoder.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserDetails user =  userDao.findUserByUsername(email);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("User not found!", email));
+        }
+        return user;
     }
 }

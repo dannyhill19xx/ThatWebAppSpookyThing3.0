@@ -1,49 +1,95 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="">
+<html lang="en">
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <meta charset="UTF-8">
-    <title>user</title>
+    <title>Table of Users</title>
 </head>
-<body>
-<h1>User data</h1>
-<div>
-    <table>
-        <caption>
-            <h1>LIST</h1>
-        </caption>
+<!--Навбар-->
+<nav class="navbar bg-dark navbar-dark fixed-top">
+    <form class="form-inline">
+        <strong><span class="navbar-text text-white" th:text="${initUser.getEmail()}" }></span></strong>
+        <span class="navbar-text text-white">&nbsp with roles: &nbsp</span>
+        <span class="navbar-text text-white"><a th:each="role:*{initUser.getRoles()}"
+                                                th:text="${role.roleName.substring(5).concat(' ')}"></a></span>
+    </form>
+    <ul class="navbar-nav float-lg-end">
+        <li class="nav-item">
+            <a class="nav-link text-muted" th:href="@{/logout}">Logout</a>
+        </li>
+    </ul>
+</nav>
 
-        <style>
-            table.iksweb th{text-decoration: none;border-collapse:collapse;width:auto;text-align:center;}
-            table.iksweb th{font-weight:normal;font-size:19px; color:#ffffff;background-color:#faa700;}
-            table.iksweb td{font-size:20px;color:#0f4369;}
-            table.iksweb td,table.iksweb th{white-space:pre-wrap;padding:5px 22px;line-height:20px;vertical-align: middle;border: 2px solid #000000;}
-            table.iksweb tr:hover{background-color:#fffb80}
-            table.iksweb tr:hover td{color:#060708;cursor:default;}
-        </style>
+<!-- Общий контейнер -->
+<div class="container-fluid bg-light">
+    <div class="row">
+        <!-- Левый столбец -->
+        <div class="col-sm-2 bg-white min-vh-100">
+            <ul class="nav nav-pills flex-column">
+                <br/>
+                <br/>
+                <br/>
+                <div sec:authorize="hasRole('ADMIN')">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin}">Admin</a>
+                </li> </div>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/user}">User</a>
+                </li>
+            </ul>
+        </div>
 
-        <table class="iksweb">
-            <tr><th> ID </th>
-                <th> Name </th>
-                <th> Lastname </th>
-                <th> Age </th>
-                <th> email </th>
-                <th> Role </th>
-            </tr>
-            <tr>
-                <td th:text="${user.getId}"></td>
-                <td th:text="${user.getFirstName}"></td>
-                <td th:text="${user.getLastName}"></td>
-                <td th:text="${user.getAge}"></td>
-                <td th:text="${user.getEmail}"></td>
-                <td th:each="role:${roles}"><p th:text="${role.getName}"></p></td>
-            </tr>
-        </table>
-    </table>
+        <!-- Информация о юзере -->
+        <div class="col-sm-10 bg-light"><br><br><br>
+            <h2>User Info-Page</h2>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col border bg-light">
+                        <p><h6>About User:</h6></p>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col border bg-white">
+                        <br />
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Surname</th>
+                                <th>Age</th>
+                                <th>Email</th>
+                                <th>Roles</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td th:text="${initUser.getId}"></td>
+                                <td th:text="${initUser.getName}"></td>
+                                <td th:text="${initUser.getSurname}"></td>
+                                <td th:text="${initUser.getAge}"></td>
+                                <td th:text="${initUser.getEmail}"></td>
+                                <td><a th:each="role:*{initUser.getRoles}" th:text="${role.getRoleName.substring(5).concat(' ')}"></a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
-<br/>
-<br/>
+</div>
 
-        <button><a th:href="@{/logout}">Logout</a></button>
-
-</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </html>
